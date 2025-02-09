@@ -100,10 +100,18 @@
                 <button onclick="recordThrow(2)">D</button>
                 <button onclick="recordThrow(3)">T</button>
                 <button onclick="recordThrow(-1)">M</button>
+                <button onclick="recordThrow(0)">0</button>
             </div>
             <p>Throws:</p>
             <div id="throwsList" class="throws-list"></div>
             <button onclick="nextPlayer()">Next Player</button>
+        </div>
+        <div id="results" class="hidden">
+            <h2>Game Over!</h2>
+            <h3>Final Scores:</h3>
+            <div id="finalScores"></div>
+            <h3>Winner: <span id="winner"></span></h3>
+            <button onclick="location.reload()">Restart</button>
         </div>
     </div>
     <script>
@@ -133,22 +141,10 @@
             });
         }
         
-        function removePlayer(index) {
-            players.splice(index, 1);
-            updatePlayerList();
-        }
-        
         function startGame() {
-            if (players.length === 0) return alert('Enter at least one player.');
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('game').classList.remove('hidden');
             updateUI();
-        }
-        
-        function updateUI() {
-            document.getElementById('round').textContent = currentRound;
-            document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
-            updateThrowsList();
         }
         
         function recordThrow(points) {
@@ -168,11 +164,6 @@
             });
         }
         
-        function removeThrow(index) {
-            throws.splice(index, 1);
-            updateThrowsList();
-        }
-        
         function nextPlayer() {
             if (throws.length < 3) return alert('Complete 3 throws first.');
             scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
@@ -181,12 +172,19 @@
             if (currentPlayerIndex >= players.length) {
                 currentPlayerIndex = 0;
                 currentRound++;
-                if (currentRound > 21) return alert('Game Over');
+                if (currentRound > 21) return endGame();
             }
             updateUI();
         }
         
-        updateUI();
+        function endGame() {
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            let finalScores = document.getElementById('finalScores');
+            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
+            let winner = players.reduce((a, b) => scores[a] > scores[b] ? a : b);
+            document.getElementById('winner').textContent = winner;
+        }
     </script>
 </body>
 </html>
