@@ -151,6 +151,41 @@
             updateThrowsList();
         }
         
+        function recordThrow(points) {
+            if (throws.length < 3) {
+                throws.push(points);
+                updateThrowsList();
+            }
+        }
+        
+        function updateThrowsList() {
+            const throwsList = document.getElementById('throwsList');
+            throwsList.innerHTML = '';
+            throws.forEach((t, index) => {
+                let div = document.createElement('div');
+                div.innerHTML = `${t} <button onclick="removeThrow(${index})">X</button>`;
+                throwsList.appendChild(div);
+            });
+        }
+        
+        function removeThrow(index) {
+            throws.splice(index, 1);
+            updateThrowsList();
+        }
+        
+        function nextPlayer() {
+            if (throws.length < 3) return alert('Complete 3 throws first.');
+            scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
+            throws = [];
+            currentPlayerIndex++;
+            if (currentPlayerIndex >= players.length) {
+                currentPlayerIndex = 0;
+                currentRound++;
+                if (currentRound > 21) return alert('Game Over');
+            }
+            updateUI();
+        }
+        
         updateUI();
     </script>
 </body>
