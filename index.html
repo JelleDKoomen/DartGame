@@ -131,26 +131,10 @@
             document.getElementById('playerName').value = '';
         }
         
-        function updatePlayerList() {
-            const playerList = document.getElementById('playerList');
-            playerList.innerHTML = '';
-            players.forEach((player, index) => {
-                let div = document.createElement('div');
-                div.innerHTML = `${player} <button onclick="removePlayer(${index})">X</button>`;
-                playerList.appendChild(div);
-            });
-        }
-        
         function startGame() {
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('game').classList.remove('hidden');
             updateUI();
-        }
-        
-        function updateUI() {
-            document.getElementById('round').textContent = currentRound;
-            document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
-            updateThrowsList();
         }
         
         function recordThrow(points) {
@@ -175,11 +159,18 @@
             scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
             throws = [];
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            if (currentPlayerIndex === 0) {
-                currentRound++;
-                if (currentRound > 21) return endGame();
-            }
+            if (currentRound === 21 && currentPlayerIndex === 0) return endGame();
+            if (currentPlayerIndex === 0) currentRound++;
             updateUI();
+        }
+        
+        function endGame() {
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            let finalScores = document.getElementById('finalScores');
+            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
+            let winner = players.reduce((a, b) => scores[a] > scores[b] ? a : b);
+            document.getElementById('winner').textContent = winner;
         }
     </script>
 </body>
