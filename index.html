@@ -94,7 +94,7 @@
         </div>
         <div id="game" class="hidden">
             <h2>Round <span id="round">1</span> / 21</h2>
-            <h3 id="currentPlayer"></h3>
+            <h3 id="currentPlayer">Player Name</h3>
             <div class="buttons">
                 <button onclick="recordThrow(1)">S</button>
                 <button onclick="recordThrow(2)">D</button>
@@ -147,6 +147,12 @@
             updateUI();
         }
         
+        function updateUI() {
+            document.getElementById('round').textContent = currentRound;
+            document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
+            updateThrowsList();
+        }
+        
         function recordThrow(points) {
             if (throws.length < 3) {
                 throws.push(points);
@@ -168,22 +174,12 @@
             if (throws.length < 3) return alert('Complete 3 throws first.');
             scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
             throws = [];
-            currentPlayerIndex++;
-            if (currentPlayerIndex >= players.length) {
-                currentPlayerIndex = 0;
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            if (currentPlayerIndex === 0) {
                 currentRound++;
                 if (currentRound > 21) return endGame();
             }
             updateUI();
-        }
-        
-        function endGame() {
-            document.getElementById('game').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
-            let finalScores = document.getElementById('finalScores');
-            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
-            let winner = players.reduce((a, b) => scores[a] > scores[b] ? a : b);
-            document.getElementById('winner').textContent = winner;
         }
     </script>
 </body>
