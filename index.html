@@ -85,7 +85,14 @@
 <body>
     <div class="container">
         <h1>Darts Game</h1>
-        <div id="game">
+        <div id="setup">
+            <h3>Enter Usernames (1-6 Players)</h3>
+            <input type="text" id="playerName" placeholder="Enter player name">
+            <button onclick="addPlayer()">Add Player</button>
+            <div id="playerList" class="throws-list"></div>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        <div id="game" class="hidden">
             <h2>Round <span id="round">1</span> / 21</h2>
             <h3 id="currentPlayer"></h3>
             <div class="buttons">
@@ -100,50 +107,48 @@
         </div>
     </div>
     <script>
-        let players = ["Player 1", "Player 2"];
+        let players = [];
         let scores = {};
         let currentRound = 1;
         let currentPlayerIndex = 0;
         let throws = [];
         
+        function addPlayer() {
+            const playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) return;
+            if (players.length >= 6) return alert('Maximum 6 players allowed.');
+            players.push(playerName);
+            scores[playerName] = 0;
+            updatePlayerList();
+            document.getElementById('playerName').value = '';
+        }
+        
+        function updatePlayerList() {
+            const playerList = document.getElementById('playerList');
+            playerList.innerHTML = '';
+            players.forEach((player, index) => {
+                let div = document.createElement('div');
+                div.innerHTML = `${player} <button onclick="removePlayer(${index})">X</button>`;
+                playerList.appendChild(div);
+            });
+        }
+        
+        function removePlayer(index) {
+            players.splice(index, 1);
+            updatePlayerList();
+        }
+        
+        function startGame() {
+            if (players.length === 0) return alert('Enter at least one player.');
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            updateUI();
+        }
+        
         function updateUI() {
             document.getElementById('round').textContent = currentRound;
             document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
             updateThrowsList();
-        }
-        
-        function recordThrow(points) {
-            if (throws.length < 3) {
-                throws.push(points);
-                updateThrowsList();
-            }
-        }
-        
-        function updateThrowsList() {
-            const throwsList = document.getElementById('throwsList');
-            throwsList.innerHTML = '';
-            throws.forEach((t, index) => {
-                let div = document.createElement('div');
-                div.innerHTML = `${t} <button onclick="removeThrow(${index})">X</button>`;
-                throwsList.appendChild(div);
-            });
-        }
-        
-        function removeThrow(index) {
-            throws.splice(index, 1);
-            updateThrowsList();
-        }
-        
-        function nextPlayer() {
-            if (throws.length < 3) return alert('Complete 3 throws first.');
-            throws = [];
-            currentPlayerIndex++;
-            if (currentPlayerIndex >= players.length) {
-                currentPlayerIndex = 0;
-                currentRound++;
-                if (currentRound > 21) return alert('Game Over');
-            }
-            updateUI();
         }
         
         updateUI();
