@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darts Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #2c3e50;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .hidden { display: none; }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        input {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e74c3c;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+        .buttons button {
+            margin: 5px;
+            padding: 15px;
+            font-size: 18px;
+            width: 70px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Darts Game</h1>
+        <div id="setup">
+            <h3>Enter Usernames (1-6 Players)</h3>
+            <div id="playerInputs"></div>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        <div id="game" class="hidden">
+            <h2>Round <span id="round">1</span> / 21</h2>
+            <h3 id="currentPlayer"></h3>
+            <div class="buttons">
+                <button onclick="recordThrow(1)">S</button>
+                <button onclick="recordThrow(2)">D</button>
+                <button onclick="recordThrow(3)">T</button>
+                <button onclick="recordThrow(-1)">M</button>
+            </div>
+            <p>Throws: <span id="throws">0</span> / 3</p>
+            <button onclick="nextPlayer()">Next Player</button>
+        </div>
+        <div id="result" class="hidden">
+            <h2>Game Over!</h2>
+            <h3>Winner: <span id="winner"></span></h3>
+            <button onclick="location.reload()">Restart</button>
+        </div>
+    </div>
+    <script>
+        let players = [];
+        let scores = {};
+        let currentRound = 1;
+        let currentPlayerIndex = 0;
+        let throws = 0;
+        
+        function startGame() {
+            const inputs = document.querySelectorAll('.playerInput');
+            players = Array.from(inputs).map(input => input.value).filter(name => name.trim() !== '');
+            if (players.length === 0) return alert('Enter at least one player.');
+            players.forEach(player => scores[player] = 0);
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            updateUI();
+        }
+        
+        function updateUI() {
+            document.getElementById('round').textContent = currentRound;
+            document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
+            document.getElementById('throws').textContent = throws;
+        }
+        
+        function recordThrow(points) {
+            if (throws < 3) {
+                scores[players[currentPlayerIndex]] += points;
+                throws++;
+                document.getElementById('throws').textContent = throws;
+            }
+        }
+        
+        function nextPlayer() {
+            if (throws < 3) return alert('Finish 3 throws first.');
+            throws = 0;
+            currentPlayerIndex++;
+            if (currentPlayerIndex >= players.length) {
+                currentPlayerIndex = 0;
+                currentRound++;
+                if (currentRound > 21) return endGame();
+            }
+            updateUI();
+        }
+        
+        function endGame() {
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            let winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            document.getElementById('winner').textContent = winner;
+        }
+        
+        window.onload = function() {
+            const playerInputs = document.getElementById('playerInputs');
+            for (let i = 0; i < 6; i++) {
+                let input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = `Player ${i + 1}`;
+                input.classList.add('playerInput');
+                playerInputs.appendChild(input);
+            }
+        }
+    </script>
+</body>
+</html>
