@@ -107,6 +107,19 @@
         .throws-list button {
             margin-top: 5px;
         }
+        .player-list{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .player-list div {
+            margin: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .player-list button {
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -116,7 +129,7 @@
             <h3>Enter Usernames (1-6 Players)</h3>
             <input type="text" id="playerName" placeholder="Enter player name">
             <button class="green-button" onclick="addPlayer()"><i class="fas fa-user-plus"></i> Add Player</button>
-            <div id="playerList" class="throws-list"></div>
+            <div id="playerList" class="player-list"></div>
             <button onclick="startGame()"><i class="fas fa-play"></i> Start Game</button>
         </div>
         <div id="game" class="hidden">
@@ -213,7 +226,7 @@
             scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
             throws = [];
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            if (currentRound === 21 && currentPlayerIndex === 0) return endGame();
+            if (currentRound === 5 && currentPlayerIndex === 0) return endGame();
             if (currentPlayerIndex === 0) currentRound++;
             updateUI();
         }
