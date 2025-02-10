@@ -196,7 +196,7 @@
             scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
             throws = [];
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            if (currentRound === 21 && currentPlayerIndex === 0) return endGame();
+            if (currentRound === 5 && currentPlayerIndex === 0) return endGame();
             if (currentPlayerIndex === 0) currentRound++;
             updateUI();
         }
