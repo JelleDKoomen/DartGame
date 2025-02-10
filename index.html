@@ -34,7 +34,7 @@
         }
         button {
             padding: 12px 15px;
-            font-size: 18px;
+            font-size: 20px;
             border: none;
             border-radius: 5px;
             background-color: #e74c3c;
@@ -56,38 +56,53 @@
         }
         .buttons button {
             margin: 5px;
-            padding: 15px;
-            font-size: 18px;
-            width: 22%;
-            min-width: 60px;
+            padding: 20px;
+            font-size: 22px;
+            width: 25%;
+            min-width: 70px;
         }
         .throws-list {
             text-align: center;
             margin-top: 10px;
-            font-size: 24px;
+            font-size: 34px;
             font-weight: bold;
         }
         .throws-list div {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: #3b4f61;
-            padding: 10px 15px;
+            padding: 20px;
             margin: 5px;
             border-radius: 5px;
-            font-size: 24px;
+            font-size: 34px;
+            position: relative;
         }
         .throws-list button {
             background-color: #e74c3c;
             border: none;
-            padding: 5px 10px;
+            padding: 10px;
             cursor: pointer;
-            border-radius: 5px;
-            margin-left: 10px;
+            border-radius: 50%;
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            line-height: 20px;
+        }
+        .Header{
+            font-size: xx-large;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Darts Game</h1>
+        <h1 class="Header">Darts Game</h1>
         <div id="setup">
             <h3>Enter Usernames (1-6 Players)</h3>
             <input type="text" id="playerName" placeholder="Enter player name">
@@ -96,10 +111,8 @@
             <button onclick="startGame()">Start Game</button>
         </div>
         <div id="game" class="hidden">
-            <h2>Round <span id="round">1</span> / 21</h2>
-            <h3 id="currentPlayer"></h3>
-            <p>Throws:</p>
-            <div id="throwsList" class="throws-list"></div>
+            <h1>Round <span id="round">1</span> / 21</h1>
+            <h2 id="currentPlayer">Player Name</h2>
             <div class="buttons">
                 <button onclick="recordThrow(1)">S</button>
                 <button onclick="recordThrow(2)">D</button>
@@ -107,6 +120,8 @@
                 <button onclick="recordThrow(-1)">M</button>
                 <button onclick="recordThrow(0)">0</button>
             </div>
+            <p>Throws:</p>
+            <div id="throwsList" class="throws-list"></div>
             <button onclick="nextPlayer()">Next Player</button>
         </div>
         <div id="results" class="hidden">
@@ -120,10 +135,10 @@
     <script>
         let players = [];
         let scores = {};
-        let currentRound = 1;
         let currentPlayerIndex = 0;
+        let currentRound = 1;
         let throws = [];
-        
+    
         function addPlayer() {
             const playerName = document.getElementById('playerName').value.trim();
             if (!playerName) return;
@@ -133,31 +148,43 @@
             updatePlayerList();
             document.getElementById('playerName').value = '';
         }
-        
+    
+        function updatePlayerList() {
+            const playerList = document.getElementById('playerList');
+            playerList.innerHTML = players.map((p, i) => `<div>${p} <button onclick="removePlayer(${i})">X</button></div>`).join('');
+        }
+    
         function startGame() {
             if (players.length === 0) return alert('Enter at least one player.');
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('game').classList.remove('hidden');
             updateUI();
         }
-        
+    
         function recordThrow(points) {
+            points = parseInt(points, 10);
+            if (isNaN(points)) return alert('Invalid points.');
             if (throws.length < 3) {
                 throws.push(points);
                 updateThrowsList();
             }
         }
-        
+    
+        function removePlayer(index) {
+            players.splice(index, 1);
+            updatePlayerList();
+        }
+    
+        function removeThrow(index) {
+            throws.splice(index, 1);
+            updateThrowsList();
+        }
+    
         function updateThrowsList() {
             const throwsList = document.getElementById('throwsList');
-            throwsList.innerHTML = '';
-            throws.forEach((t, index) => {
-                let div = document.createElement('div');
-                div.innerHTML = `${t} <button onclick="removeThrow(${index})">X</button>`;
-                throwsList.appendChild(div);
-            });
+            throwsList.innerHTML = throws.map((t, i) => `<div>${t} <button onclick="removeThrow(${i})">X</button></div>`).join('');
         }
-        
+    
         function nextPlayer() {
             if (throws.length < 3) return alert('Complete 3 throws first.');
             scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
@@ -167,11 +194,21 @@
             if (currentPlayerIndex === 0) currentRound++;
             updateUI();
         }
-        
+    
         function updateUI() {
             document.getElementById('round').textContent = currentRound;
             document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
             updateThrowsList();
+        }
+
+        updateUI();
+        function endGame() {
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            let finalScores = document.getElementById('finalScores');
+            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
+            let winner = players.reduce((a, b) => scores[a] > scores[b] ? a : b);
+            document.getElementById('winner').textContent = winner;
         }
     </script>
 </body>
