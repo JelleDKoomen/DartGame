@@ -64,21 +64,24 @@
         .throws-list {
             text-align: center;
             margin-top: 10px;
+            font-size: 24px;
+            font-weight: bold;
         }
         .throws-list div {
             display: inline-block;
             background: #3b4f61;
-            padding: 5px 10px;
+            padding: 10px 15px;
             margin: 5px;
             border-radius: 5px;
+            font-size: 24px;
         }
         .throws-list button {
             background-color: #e74c3c;
             border: none;
-            padding: 3px 6px;
+            padding: 5px 10px;
             cursor: pointer;
             border-radius: 5px;
-            margin-left: 5px;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -94,7 +97,9 @@
         </div>
         <div id="game" class="hidden">
             <h2>Round <span id="round">1</span> / 21</h2>
-            <h3 id="currentPlayer">Player Name</h3>
+            <h3 id="currentPlayer"></h3>
+            <p>Throws:</p>
+            <div id="throwsList" class="throws-list"></div>
             <div class="buttons">
                 <button onclick="recordThrow(1)">S</button>
                 <button onclick="recordThrow(2)">D</button>
@@ -102,8 +107,6 @@
                 <button onclick="recordThrow(-1)">M</button>
                 <button onclick="recordThrow(0)">0</button>
             </div>
-            <p>Throws:</p>
-            <div id="throwsList" class="throws-list"></div>
             <button onclick="nextPlayer()">Next Player</button>
         </div>
         <div id="results" class="hidden">
@@ -132,6 +135,7 @@
         }
         
         function startGame() {
+            if (players.length === 0) return alert('Enter at least one player.');
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('game').classList.remove('hidden');
             updateUI();
@@ -142,16 +146,6 @@
                 throws.push(points);
                 updateThrowsList();
             }
-        }
-
-        function updatePlayerList() {
-            const playerList = document.getElementById('playerList');
-            playerList.innerHTML = '';
-            players.forEach((player, index) => {
-                let div = document.createElement('div');
-                div.innerHTML = `${player} <button onclick="removePlayer(${index})">X</button>`;
-                playerList.appendChild(div);
-            });
         }
         
         function updateThrowsList() {
@@ -174,13 +168,10 @@
             updateUI();
         }
         
-        function endGame() {
-            document.getElementById('game').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
-            let finalScores = document.getElementById('finalScores');
-            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
-            let winner = players.reduce((a, b) => scores[a] > scores[b] ? a : b);
-            document.getElementById('winner').textContent = winner;
+        function updateUI() {
+            document.getElementById('round').textContent = currentRound;
+            document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
+            updateThrowsList();
         }
     </script>
 </body>
