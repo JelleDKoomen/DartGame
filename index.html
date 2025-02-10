@@ -98,6 +98,15 @@
         .Header{
             font-size: xx-large;
         }
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
@@ -211,6 +220,8 @@
         function endGame() {
             document.getElementById('game').classList.add('hidden');
             document.getElementById('results').classList.remove('hidden');
+            let finalScores = document.getElementById('finalScores');
+            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
             let sortedPlayers = players.slice().sort((a, b) => scores[b] - scores[a]);
             document.getElementById('winner').textContent = sortedPlayers[0] || "No winner";
             document.getElementById('firstPlace').textContent = sortedPlayers[0] || "-";
@@ -225,18 +236,20 @@
             const ctx = canvas.getContext("2d");
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            const colors = ["gold", "red", "blue", "green", "purple"];
             let particles = Array.from({length: 100}, () => ({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 r: Math.random() * 5 + 2,
-                d: Math.random() * 10
+                d: Math.random() * 10,
+                color: colors[Math.floor(Math.random() * colors.length)]
             }));
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach(p => {
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = "gold";
+                    ctx.fillStyle = p.color;
                     ctx.fill();
                     p.y += p.d;
                     if (p.y > canvas.height) p.y = 0;
