@@ -143,6 +143,16 @@
                 updateThrowsList();
             }
         }
+
+        function updatePlayerList() {
+            const playerList = document.getElementById('playerList');
+            playerList.innerHTML = '';
+            players.forEach((player, index) => {
+                let div = document.createElement('div');
+                div.innerHTML = `${player} <button onclick="removePlayer(${index})">X</button>`;
+                playerList.appendChild(div);
+            });
+        }
         
         function updateThrowsList() {
             const throwsList = document.getElementById('throwsList');
