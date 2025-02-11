@@ -97,16 +97,16 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            font-size: 24px; 
+            font-size: 24px; /* Increased font size for better visibility */
         }
         .throws-list div {
             margin: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 50px; 
-            font-size: 32px; 
-            font-weight: bold; 
+            width: 50px; /* Fixed width for consistency */
+            font-size: 32px; /* Increased font size */
+            font-weight: bold; /* Make the score bold */
         }
         .throws-list button {
             margin-top: 5px;
@@ -133,6 +133,12 @@
             max-width: 300px;
             text-align: center;
             border-radius: 10px;
+            color: black; /* Make the text black */
+        }
+        .modal-content .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Add some space between buttons */
         }
         .modal-content button {
             width: auto;
@@ -183,8 +189,10 @@
     <div id="endGameModal" class="modal">
         <div class="modal-content">
             <p>Are you sure you want to end the game?</p>
-            <button onclick="endGame()">Yes</button>
-            <button onclick="closeEndGameModal()">No</button>
+            <div class="button-container">
+                <button onclick="endGame()">Yes</button>
+                <button onclick="closeEndGameModal()">No</button>
+            </div>
         </div>
     </div>
     <canvas id="confetti"></canvas>
