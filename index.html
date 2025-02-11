@@ -97,6 +97,7 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
+            font-size: 24px; /* Increased font size for better visibility */
         }
         .throws-list div {
             margin: 5px;
@@ -123,20 +124,20 @@
         <div id="game" class="hidden">
             <h1>Round <span id="round">1</span> / 21</h1>
             <h2 id="currentPlayer">Player Name</h2>
-            <div class="buttons">
-                <button onclick="recordThrow(1)"><i class="fas fa-bullseye"></i> S</button>
-                <button onclick="recordThrow(2)"><i class="fas fa-bullseye"></i> D</button>
-                <button onclick="recordThrow(3)"><i class="fas fa-bullseye"></i> T</button>
-                <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
-                <button onclick="recordThrow(0)"><i class="fas fa-circle"></i> 0</button>
-            </div>
             <p>Throws:</p>
             <div id="throwsList" class="throws-list">
                 <div>-</div>
                 <div>-</div>
                 <div>-</div>
             </div>
+            <div class="buttons">
+                <button onclick="recordThrow(1)"><i class="fas fa-bullseye"></i> S</button>
+                <button onclick="recordThrow(2)"><i class="fas fa-bullseye"></i> D</button>
+                <button onclick="recordThrow(3)"><i class="fas fa-bullseye"></i> T</button>
+                <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
+            </div>
             <button class="green-button" onclick="nextPlayer()"><i class="fas fa-arrow-right"></i> Next Player</button>
+            <button class="green-button" onclick="endGame()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
         </div>
         <div id="results" class="hidden">
             <h2>Game Over!</h2>
@@ -186,9 +187,9 @@
         }
 
         function recordThrow(points) {
-            points = parseInt(points, 10);
-            if (isNaN(points)) return alert('Invalid points.');
             if (throws.length < 3) {
+                points = points === '' ? 0 : parseInt(points, 10);
+                if (isNaN(points)) return alert('Invalid points.');
                 throws.push(points);
                 updateThrowsList();
             }
