@@ -97,17 +97,46 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            font-size: 24px; /* Increased font size for better visibility */
+            font-size: 24px; 
         }
         .throws-list div {
             margin: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 50px; /* Fixed width for consistency */
+            width: 50px; 
+            font-size: 32px; 
+            font-weight: bold; 
         }
         .throws-list button {
             margin-top: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .modal-content button {
+            width: auto;
+            margin: 10px;
         }
     </style>
 </head>
@@ -137,7 +166,7 @@
                 <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
             </div>
             <button class="green-button" onclick="nextPlayer()"><i class="fas fa-arrow-right"></i> Next Player</button>
-            <button class="green-button" onclick="endGame()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
+            <button class="green-button" onclick="showEndGameModal()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
         </div>
         <div id="results" class="hidden">
             <h2>Game Over!</h2>
@@ -149,6 +178,13 @@
             </div>
             <div id="finalScores"></div>
             <button onclick="location.reload()"><i class="fas fa-redo"></i> Restart</button>
+        </div>
+    </div>
+    <div id="endGameModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to end the game?</p>
+            <button onclick="endGame()">Yes</button>
+            <button onclick="closeEndGameModal()">No</button>
         </div>
     </div>
     <canvas id="confetti"></canvas>
@@ -213,11 +249,10 @@
                     <button onclick="removeThrow(${i})"><i class="fas fa-times"></i></button>
                 </div>
             `).join('');
-            // Add placeholders if less than 3 throws
             for (let i = throws.length; i < 3; i++) {
                 throwsList.innerHTML += `
                     <div>
-                        -
+                        0
                     </div>
                 `;
             }
@@ -239,7 +274,16 @@
             updateThrowsList();
         }
 
+        function showEndGameModal() {
+            document.getElementById('endGameModal').style.display = 'flex';
+        }
+
+        function closeEndGameModal() {
+            document.getElementById('endGameModal').style.display = 'none';
+        }
+
         function endGame() {
+            closeEndGameModal();
             document.getElementById('game').classList.add('hidden');
             document.getElementById('results').classList.remove('hidden');
             let finalScores = document.getElementById('finalScores');
