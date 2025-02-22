@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dart Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="setup" class="container">
+        <h3>Enter Usernames (1-6 Players)</h3>
+        <input type="text" id="playerName" placeholder="Enter player name">
+        <button class="green-button" onclick="addPlayer()"><i class="fas fa-user-plus"></i> Add Player</button>
+        <div id="playerList" class="player-list"></div>
+        <button onclick="startGame()"><i class="fas fa-play"></i> Start Game</button>
+    </div>
+
+    <div id="game" class="container hidden">
+        <h1>Round <span id="round">1</span> / 21</h1>
+        <h2 id="currentPlayer">Player Name</h2>
+        <p>Throws:</p>
+        <div id="throwsList" class="throws-list">
+            <div>-</div>
+            <div>-</div>
+            <div>-</div>
+        </div>
+        <div class="buttons">
+            <button onclick="recordThrow(1)"><i class="fas fa-bullseye"></i> S</button>
+            <button onclick="recordThrow(2)"><i class="fas fa-bullseye"></i> D</button>
+            <button onclick="recordThrow(3)"><i class="fas fa-bullseye"></i> T</button>
+            <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
+        </div>
+        <button class="green-button" onclick="nextPlayer()"><i class="fas fa-arrow-right"></i> Next Player</button>
+        <button class="green-button" onclick="showEndGameModal()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
+    </div>
+
+    <div id="results" class="container hidden">
+        <h2>Game Over!</h2>
+        <h3 class="winner-display">Winner: <span id="winner"></span></h3>
+        <div class="podium">
+            <div class="second" id="secondPlace">2nd</div>
+            <div class="first" id="firstPlace">1st</div>
+            <div class="third" id="thirdPlace">3rd</div>
+        </div>
+        <div id="finalScores"></div>
+        <button onclick="location.reload()"><i class="fas fa-redo"></i> Restart</button>
+    </div>
+
+    <div id="endGameModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to end the game?</p>
+            <div class="button-container">
+                <button onclick="endGame()">Yes</button>
+                <button onclick="closeEndGameModal()">No</button>
+            </div>
+        </div>
+    </div>
+    <canvas id="confetti"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>

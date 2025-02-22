@@ -1,12 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const mainPage = document.getElementById('main-page');
     const setupPage = document.getElementById('setup');
     const gamePage = document.getElementById('game');
     const resultsPage = document.getElementById('results');
     const orderPage = document.getElementById('order-page');
-    const dartGameButton = document.getElementById('dart-game-button');
-    const orderSystemButton = document.getElementById('order-system-button');
-    const backButton = document.getElementById('back-button');
     const orderForm = document.getElementById('order-form');
     const orderList = document.getElementById('order-list');
     const totalAmountSpan = document.getElementById('total-amount');
@@ -19,67 +15,54 @@ document.addEventListener('DOMContentLoaded', () => {
     let throws = [];
     let orders = [];
 
-    dartGameButton.addEventListener('click', () => {
-        mainPage.classList.add('hidden');
-        setupPage.classList.remove('hidden');
-    });
+    if (orderForm) {
+        orderForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const address = document.getElementById('address').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const paymentMethod = document.getElementById('payment-method').value;
 
-    orderSystemButton.addEventListener('click', () => {
-        mainPage.classList.add('hidden');
-        orderPage.classList.remove('hidden');
-    });
-
-    backButton.addEventListener('click', () => {
-        orderPage.classList.add('hidden');
-        mainPage.classList.remove('hidden');
-    });
-
-    orderForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const address = document.getElementById('address').value;
-        const amount = parseFloat(document.getElementById('amount').value);
-        const paymentMethod = document.getElementById('payment-method').value;
-
-        const order = { address, amount, paymentMethod };
-        orders.push(order);
-        updateOrderList();
-        updateTotalAmount();
-    });
-
-    orderList.addEventListener('click', (event) => {
-        if (event.target.classList.contains('delete-button')) {
-            const index = event.target.dataset.index;
-            orders.splice(index, 1);
+            const order = { address, amount, paymentMethod };
+            orders.push(order);
             updateOrderList();
             updateTotalAmount();
-        }
-    });
-
-    finishButton.addEventListener('click', () => {
-        orders = [];
-        updateOrderList();
-        updateTotalAmount();
-    });
-
-    function updateOrderList() {
-        orderList.innerHTML = '';
-        orders.forEach((order, index) => {
-            const li = document.createElement('li');
-            li.textContent = `${order.address} - €${order.amount.toFixed(2)} (Payment: ${order.paymentMethod})`;
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.classList.add('delete-button');
-            deleteButton.dataset.index = index;
-            li.appendChild(deleteButton);
-            orderList.appendChild(li);
         });
-    }
 
-    function updateTotalAmount() {
-        const totalAmount = orders
-            .filter(order => order.paymentMethod === 'contant')
-            .reduce((sum, order) => sum + order.amount, 0);
-        totalAmountSpan.textContent = totalAmount.toFixed(2);
+        orderList.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-button')) {
+                const index = event.target.dataset.index;
+                orders.splice(index, 1);
+                updateOrderList();
+                updateTotalAmount();
+            }
+        });
+
+        finishButton.addEventListener('click', () => {
+            orders = [];
+            updateOrderList();
+            updateTotalAmount();
+        });
+
+        function updateOrderList() {
+            orderList.innerHTML = '';
+            orders.forEach((order, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${order.address} - €${order.amount.toFixed(2)} (Payment: ${order.paymentMethod})`;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('delete-button');
+                deleteButton.dataset.index = index;
+                li.appendChild(deleteButton);
+                orderList.appendChild(li);
+            });
+        }
+
+        function updateTotalAmount() {
+            const totalAmount = orders
+                .filter(order => order.paymentMethod === 'contant')
+                .reduce((sum, order) => sum + order.amount, 0);
+            totalAmountSpan.textContent = totalAmount.toFixed(2);
+        }
     }
 
     // Existing Dart game functions
@@ -212,4 +195,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         draw();
     }
+
+    // Expose functions to global scope for inline event handlers
+    window.addPlayer = addPlayer;
+    window.startGame = startGame;
+    window.recordThrow = recordThrow;
+    window.removePlayer = removePlayer;
+    window.removeThrow = removeThrow;
+    window.nextPlayer = nextPlayer;
+    window.showEndGameModal = showEndGameModal;
+    window.closeEndGameModal = closeEndGameModal;
+    window.endGame = endGame;
 });

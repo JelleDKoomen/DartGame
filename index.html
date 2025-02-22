@@ -3,86 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darts Game</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Main Page</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="main-page" class="container">
         <h1 class="Header">Darts Game</h1>
-        <button id="dart-game-button" class="green-button">Dart Game</button>
-        <button id="order-system-button" class="green-button">Order System</button>
+        <button onclick="location.href='dartgame.html'" class="green-button">Dart Game</button>
+        <button onclick="location.href='orderpage.html'" class="green-button">Order System</button>
     </div>
-
-    <div id="setup" class="container hidden">
-        <h3>Enter Usernames (1-6 Players)</h3>
-        <input type="text" id="playerName" placeholder="Enter player name">
-        <button class="green-button" onclick="addPlayer()"><i class="fas fa-user-plus"></i> Add Player</button>
-        <div id="playerList" class="player-list"></div>
-        <button onclick="startGame()"><i class="fas fa-play"></i> Start Game</button>
-    </div>
-
-    <div id="game" class="container hidden">
-        <h1>Round <span id="round">1</span> / 21</h1>
-        <h2 id="currentPlayer">Player Name</h2>
-        <p>Throws:</p>
-        <div id="throwsList" class="throws-list">
-            <div>-</div>
-            <div>-</div>
-            <div>-</div>
-        </div>
-        <div class="buttons">
-            <button onclick="recordThrow(1)"><i class="fas fa-bullseye"></i> S</button>
-            <button onclick="recordThrow(2)"><i class="fas fa-bullseye"></i> D</button>
-            <button onclick="recordThrow(3)"><i class="fas fa-bullseye"></i> T</button>
-            <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
-        </div>
-        <button class="green-button" onclick="nextPlayer()"><i class="fas fa-arrow-right"></i> Next Player</button>
-        <button class="green-button" onclick="showEndGameModal()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
-    </div>
-
-    <div id="results" class="container hidden">
-        <h2>Game Over!</h2>
-        <h3 class="winner-display">Winner: <span id="winner"></span></h3>
-        <div class="podium">
-            <div class="second" id="secondPlace">2nd</div>
-            <div class="first" id="firstPlace">1st</div>
-            <div class="third" id="thirdPlace">3rd</div>
-        </div>
-        <div id="finalScores"></div>
-        <button onclick="location.reload()"><i class="fas fa-redo"></i> Restart</button>
-    </div>
-
-    <div id="order-page" class="container hidden">
-        <h1>Order Page</h1>
-        <form id="order-form">
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required>
-            <label for="amount">Amount (€):</label>
-            <input type="number" step="0.01" id="amount" name="amount" required>
-            <label for="payment-method">Payment Method:</label>
-            <select id="payment-method" name="payment-method">
-                <option value="contant">Contant</option>
-                <option value="rekening">Rekening</option>
-            </select>
-            <button type="submit">Add Order</button>
-        </form>
-        <ul id="order-list"></ul>
-        <p>Total (contant): €<span id="total-amount">0.00</span></p>
-        <button id="finish-button">Finish</button>
-        <button id="back-button" class="green-button">Back to Main Page</button>
-    </div>
-
-    <div id="endGameModal" class="modal">
-        <div class="modal-content">
-            <p>Are you sure you want to end the game?</p>
-            <div class="button-container">
-                <button onclick="endGame()">Yes</button>
-                <button onclick="closeEndGameModal()">No</button>
-            </div>
-        </div>
-    </div>
-    <canvas id="confetti"></canvas>
-    <script src="script.js"></script>
 </body>
 </html>
