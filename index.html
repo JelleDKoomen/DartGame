@@ -5,187 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darts Game</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #2c3e50;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
-        .hidden { display: none; }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            line-height: 20px;
-            position: relative;
-            z-index: 1;
-            padding: 20px;
-            margin: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            background-color: #34495e;
-            border-radius: 10px;
-        }
-        input {
-            display: block;
-            width: 90%;
-            margin: 10px auto;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-        }
-        button {
-            padding: 12px 15px;
-            font-size: 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #e74c3c;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-            width: 90%;
-            max-width: 200px;
-            margin: 10px auto;
-            display: block;
-        }
-        button:hover {
-            background-color: #c0392b;
-        }
-        .green-button {
-            background-color: #27ae60;
-        }
-        .green-button:hover {
-            background-color: #1e8449;
-        }
-        .buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .buttons button {
-            margin: 5px;
-            padding: 20px;
-            font-size: 22px;
-            width: 25%;
-        }
-        .player-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 90%;
-            margin: 5px auto;
-            padding: 10px;
-            background-color: #2c3e50;
-            border-radius: 5px;
-            font-size: 22px;
-        }
-        .player-item span {
-            flex-grow: 1;
-        }
-        .player-item button {
-            width: auto;
-            padding: 5px 10px;
-            font-size: 16px;
-            margin: 0;
-        }
-        .throws-list {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            font-size: 24px; /* Increased font size for better visibility */
-        }
-        .throws-list div {
-            margin: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 50px; /* Fixed width for consistency */
-            font-size: 32px; /* Increased font size */
-            font-weight: bold; /* Make the score bold */
-        }
-        .throws-list button {
-            margin-top: 5px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 300px;
-            text-align: center;
-            border-radius: 10px;
-            color: black; /* Make the text black */
-        }
-        .modal-content .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px; /* Add some space between buttons */
-        }
-        .modal-content button {
-            width: auto;
-            margin: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div id="main-page" class="container">
         <h1 class="Header">Darts Game</h1>
-        <div id="setup">
-            <h3>Enter Usernames (1-6 Players)</h3>
-            <input type="text" id="playerName" placeholder="Enter player name">
-            <button class="green-button" onclick="addPlayer()"><i class="fas fa-user-plus"></i> Add Player</button>
-            <div id="playerList" class="player-list"></div>
-            <button onclick="startGame()"><i class="fas fa-play"></i> Start Game</button>
-        </div>
-        <div id="game" class="hidden">
-            <h1>Round <span id="round">1</span> / 21</h1>
-            <h2 id="currentPlayer">Player Name</h2>
-            <p>Throws:</p>
-            <div id="throwsList" class="throws-list">
-                <div>-</div>
-                <div>-</div>
-                <div>-</div>
-            </div>
-            <div class="buttons">
-                <button onclick="recordThrow(1)"><i class="fas fa-bullseye"></i> S</button>
-                <button onclick="recordThrow(2)"><i class="fas fa-bullseye"></i> D</button>
-                <button onclick="recordThrow(3)"><i class="fas fa-bullseye"></i> T</button>
-                <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
-            </div>
-            <button class="green-button" onclick="nextPlayer()"><i class="fas fa-arrow-right"></i> Next Player</button>
-            <button class="green-button" onclick="showEndGameModal()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
-        </div>
-        <div id="results" class="hidden">
-            <h2>Game Over!</h2>
-            <h3 class="winner-display">Winner: <span id="winner"></span></h3>
-            <div class="podium">
-                <div class="second" id="secondPlace">2nd</div>
-                <div class="first" id="firstPlace">1st</div>
-                <div class="third" id="thirdPlace">3rd</div>
-            </div>
-            <div id="finalScores"></div>
-            <button onclick="location.reload()"><i class="fas fa-redo"></i> Restart</button>
-        </div>
+        <button id="dart-game-button" class="green-button">Dart Game</button>
+        <button id="order-system-button" class="green-button">Order System</button>
     </div>
+
+    <div id="setup" class="container hidden">
+        <h3>Enter Usernames (1-6 Players)</h3>
+        <input type="text" id="playerName" placeholder="Enter player name">
+        <button class="green-button" onclick="addPlayer()"><i class="fas fa-user-plus"></i> Add Player</button>
+        <div id="playerList" class="player-list"></div>
+        <button onclick="startGame()"><i class="fas fa-play"></i> Start Game</button>
+    </div>
+
+    <div id="game" class="container hidden">
+        <h1>Round <span id="round">1</span> / 21</h1>
+        <h2 id="currentPlayer">Player Name</h2>
+        <p>Throws:</p>
+        <div id="throwsList" class="throws-list">
+            <div>-</div>
+            <div>-</div>
+            <div>-</div>
+        </div>
+        <div class="buttons">
+            <button onclick="recordThrow(1)"><i class="fas fa-bullseye"></i> S</button>
+            <button onclick="recordThrow(2)"><i class="fas fa-bullseye"></i> D</button>
+            <button onclick="recordThrow(3)"><i class="fas fa-bullseye"></i> T</button>
+            <button onclick="recordThrow(-1)"><i class="fas fa-times"></i> M</button>
+        </div>
+        <button class="green-button" onclick="nextPlayer()"><i class="fas fa-arrow-right"></i> Next Player</button>
+        <button class="green-button" onclick="showEndGameModal()"><i class="fa-solid fa-ranking-star"></i> End Game</button>
+    </div>
+
+    <div id="results" class="container hidden">
+        <h2>Game Over!</h2>
+        <h3 class="winner-display">Winner: <span id="winner"></span></h3>
+        <div class="podium">
+            <div class="second" id="secondPlace">2nd</div>
+            <div class="first" id="firstPlace">1st</div>
+            <div class="third" id="thirdPlace">3rd</div>
+        </div>
+        <div id="finalScores"></div>
+        <button onclick="location.reload()"><i class="fas fa-redo"></i> Restart</button>
+    </div>
+
+    <div id="order-page" class="container hidden">
+        <h1>Order Page</h1>
+        <form id="order-form">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+            <label for="payment-method">Payment Method:</label>
+            <select id="payment-method" name="payment-method">
+                <option value="contant">Contant</option>
+                <option value="rekening">Rekening</option>
+            </select>
+            <button type="submit">Add Order</button>
+        </form>
+        <ul id="order-list"></ul>
+        <p>Total (contant): $<span id="total-amount">0.00</span></p>
+        <button id="finish-button">Finish</button>
+        <button id="back-button" class="green-button">Back to Main Page</button>
+    </div>
+
     <div id="endGameModal" class="modal">
         <div class="modal-content">
             <p>Are you sure you want to end the game?</p>
@@ -196,142 +83,6 @@
         </div>
     </div>
     <canvas id="confetti"></canvas>
-    <script>
-        let players = [];
-        let scores = {};
-        let currentPlayerIndex = 0;
-        let currentRound = 1;
-        let throws = [];
-
-        function addPlayer() {
-            const playerName = document.getElementById('playerName').value.trim();
-            if (!playerName) return;
-            if (players.length >= 6) return alert('Maximum 6 players allowed.');
-            players.push(playerName);
-            scores[playerName] = 0;
-            updatePlayerList();
-            document.getElementById('playerName').value = '';
-        }
-
-        function updatePlayerList() {
-            const playerList = document.getElementById('playerList');
-            playerList.innerHTML = players.map((p, i) => `
-                <div class="player-item">
-                    <span>${p}</span>
-                    <button onclick="removePlayer(${i})"><i class="fas fa-times"></i></button>
-                </div>
-            `).join('');
-        }
-
-        function startGame() {
-            if (players.length === 0) return alert('Enter at least one player.');
-            document.getElementById('setup').classList.add('hidden');
-            document.getElementById('game').classList.remove('hidden');
-            updateUI();
-        }
-
-        function recordThrow(points) {
-            if (throws.length < 3) {
-                points = points === '' ? 0 : parseInt(points, 10);
-                if (isNaN(points)) return alert('Invalid points.');
-                throws.push(points);
-                updateThrowsList();
-            }
-        }
-
-        function removePlayer(index) {
-            players.splice(index, 1);
-            updatePlayerList();
-        }
-
-        function removeThrow(index) {
-            throws.splice(index, 1);
-            updateThrowsList();
-        }
-
-        function updateThrowsList() {
-            const throwsList = document.getElementById('throwsList');
-            throwsList.innerHTML = throws.map((t, i) => `
-                <div>
-                    ${t}
-                    <button onclick="removeThrow(${i})"><i class="fas fa-times"></i></button>
-                </div>
-            `).join('');
-            for (let i = throws.length; i < 3; i++) {
-                throwsList.innerHTML += `
-                    <div>
-                        0
-                    </div>
-                `;
-            }
-        }
-
-        function nextPlayer() {
-            if (throws.length < 3) return alert('Complete 3 throws first.');
-            scores[players[currentPlayerIndex]] += throws.reduce((a, b) => a + b, 0);
-            throws = [];
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            if (currentRound === 21 && currentPlayerIndex === 0) return endGame();
-            if (currentPlayerIndex === 0) currentRound++;
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('round').textContent = currentRound;
-            document.getElementById('currentPlayer').textContent = players[currentPlayerIndex];
-            updateThrowsList();
-        }
-
-        function showEndGameModal() {
-            document.getElementById('endGameModal').style.display = 'flex';
-        }
-
-        function closeEndGameModal() {
-            document.getElementById('endGameModal').style.display = 'none';
-        }
-
-        function endGame() {
-            closeEndGameModal();
-            document.getElementById('game').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
-            let finalScores = document.getElementById('finalScores');
-            finalScores.innerHTML = players.map(p => `<p>${p}: ${scores[p]}</p>`).join('');
-            let sortedPlayers = players.slice().sort((a, b) => scores[b] - scores[a]);
-            document.getElementById('winner').textContent = sortedPlayers[0] || "No winner";
-            document.getElementById('firstPlace').textContent = sortedPlayers[0] || "-";
-            document.getElementById('secondPlace').textContent = sortedPlayers[1] || "-";
-            document.getElementById('thirdPlace').textContent = sortedPlayers[2] || "-";
-            
-            launchConfetti();
-        }
-        
-        function launchConfetti() {
-            const canvas = document.getElementById("confetti");
-            const ctx = canvas.getContext("2d");
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const colors = ["gold", "red", "blue", "green", "purple"];
-            let particles = Array.from({length: 100}, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 5 + 2,
-                d: Math.random() * 10,
-                color: colors[Math.floor(Math.random() * colors.length)]
-            }));
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color;
-                    ctx.fill();
-                    p.y += p.d;
-                    if (p.y > canvas.height) p.y = 0;
-                });
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
