@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsPage = document.getElementById('results');
     const orderForm = document.getElementById('order-form');
     const orderList = document.getElementById('order-list');
+    const rekeningOrderList = document.getElementById('rekening-order-list');
     const totalAmountSpan = document.getElementById('total-amount');
     const finishButton = document.getElementById('finish-button');
     const endGameModal = document.getElementById('endGameModal');
@@ -27,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
             orders.push(order);
             updateOrderList();
             updateTotalAmount();
+
+            document.getElementById('address').value = '';
+            document.getElementById('amount').value = '';
         });
 
         orderList.addEventListener('click', (event) => {
@@ -46,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function updateOrderList() {
             orderList.innerHTML = '';
+            rekeningOrderList.innerHTML = '';
             orders.forEach((order, index) => {
                 const li = document.createElement('li');
                 li.style.display = 'flex';
@@ -57,7 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteButton.classList.add('delete-button');
                 deleteButton.dataset.index = index;
                 li.appendChild(deleteButton);
-                orderList.appendChild(li);
+
+                if (order.paymentMethod === 'rekening') {
+                    rekeningOrderList.appendChild(li);
+                } else {
+                    orderList.appendChild(li);
+                }
             });
         }
 
