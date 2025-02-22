@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         orderList.innerHTML = '';
         orders.forEach((order, index) => {
             const li = document.createElement('li');
-            li.textContent = `${order.address} - $${order.amount} (Payment: ${order.paymentMethod})`;
+            li.textContent = `${order.address} - €${order.amount.toFixed(2)} (Payment: ${order.paymentMethod})`;
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('delete-button');
