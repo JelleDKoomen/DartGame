@@ -2,11 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupPage = document.getElementById('setup');
     const gamePage = document.getElementById('game');
     const resultsPage = document.getElementById('results');
-    const orderPage = document.getElementById('order-page');
     const orderForm = document.getElementById('order-form');
     const orderList = document.getElementById('order-list');
     const totalAmountSpan = document.getElementById('total-amount');
     const finishButton = document.getElementById('finish-button');
+    const endGameModal = document.getElementById('endGameModal');
+    const confettiCanvas = document.getElementById('confetti');
 
     let players = [];
     let scores = {};
