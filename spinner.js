@@ -25,6 +25,7 @@ function generateReel() {
     let reel = document.getElementById("reel");
     reel.innerHTML = "";
 
+    // Extra kopieën toevoegen aan het begin en einde voor een vloeiendere animatie
     let extendedGames = [...games, ...games, ...games];
 
     extendedGames.forEach(game => {
@@ -33,6 +34,10 @@ function generateReel() {
         div.textContent = game;
         reel.appendChild(div);
     });
+
+    // Startpositie instellen in het midden van de lijst
+    let startPosition = -games.length * 50;
+    reel.style.transform = `translateY(${startPosition}px)`;
 }
 
 function spinWheel() {
@@ -46,6 +51,11 @@ function spinWheel() {
     reel.style.transform = `translateY(${offset}px)`;
 
     setTimeout(() => {
+        // Reset de animatie en zet de reel terug op de juiste plek zonder animatie
+        reel.style.transition = "none";
+        reel.style.transform = `translateY(${offset}px)`;
+
+        // Toon het gekozen resultaat
         document.getElementById("result").textContent = `Gekozen minigame: ${games[randomIndex]}`;
         document.getElementById("result").classList.remove("hidden");
     }, 3000);
