@@ -25,7 +25,7 @@ function generateReel() {
     let reel = document.getElementById("reel");
     reel.innerHTML = "";
 
-    let extendedGames = [...games, ...games, ...games]; // Extra duplicaten voor vloeiende beweging
+    let extendedGames = [...games, ...games, ...games];
 
     extendedGames.forEach(game => {
         let div = document.createElement("div");
@@ -33,9 +33,6 @@ function generateReel() {
         div.textContent = game;
         reel.appendChild(div);
     });
-
-    // Zet de reel op de beginpositie
-    reel.style.transform = `translateY(-${games.length * 40}px)`;
 }
 
 function spinWheel() {
@@ -43,7 +40,7 @@ function spinWheel() {
 
     let reel = document.getElementById("reel");
     let randomIndex = Math.floor(Math.random() * games.length);
-    let offset = (randomIndex + games.length) * -40; // Verschuift naar een willekeurige game
+    let offset = (randomIndex + games.length) * -50;
 
     reel.style.transition = "transform 3s cubic-bezier(0.25, 1, 0.5, 1)";
     reel.style.transform = `translateY(${offset}px)`;
