@@ -25,7 +25,7 @@ function generateReel() {
     let reel = document.getElementById("reel");
     reel.innerHTML = "";
 
-    // Extra kopieën toevoegen aan het begin en einde voor een vloeiendere animatie
+    // Minimaal driemaal de games toevoegen zodat er genoeg te scrollen is
     let extendedGames = [...games, ...games, ...games];
 
     extendedGames.forEach(game => {
@@ -35,8 +35,9 @@ function generateReel() {
         reel.appendChild(div);
     });
 
-    // Startpositie instellen in het midden van de lijst
+    // Zet de startpositie van de reel in het midden van de lijst
     let startPosition = -games.length * 50;
+    reel.style.transition = "none"; // Geen animatie bij reset
     reel.style.transform = `translateY(${startPosition}px)`;
 }
 
@@ -51,9 +52,10 @@ function spinWheel() {
     reel.style.transform = `translateY(${offset}px)`;
 
     setTimeout(() => {
-        // Reset de animatie en zet de reel terug op de juiste plek zonder animatie
+        // Reset de reel zodat hij niet steeds verder doorschuift
         reel.style.transition = "none";
-        reel.style.transform = `translateY(${offset}px)`;
+        let finalPosition = -games.length * 50 + randomIndex * -50;
+        reel.style.transform = `translateY(${finalPosition}px)`;
 
         // Toon het gekozen resultaat
         document.getElementById("result").textContent = `Gekozen minigame: ${games[randomIndex]}`;
