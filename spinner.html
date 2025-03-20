@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Party Minigame Spinner</title>
+    <link rel="stylesheet" href="spinner.css">
+</head>
+<body>
+    <div id="setup">
+        <h1>Voer Minigames In</h1>
+        <input type="text" id="gameInput" placeholder="Voer een minigame in">
+        <button onclick="addGame()">Toevoegen</button>
+        <ul id="gameList"></ul>
+        <button id="startSpinner" onclick="showSpinner()" disabled>Ga naar Spinner</button>
+    </div>
+
+    <div id="spinnerContainer" class="hidden">
+        <h1>Draai het wiel!</h1>
+        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+        <button onclick="spinWheel()">Spin!</button>
+        <p id="result"></p>
+        <button onclick="resetGame()">Opnieuw Instellen</button>
+    </div>
+
+    <script src="spinner.js"></script>
+</body>
+</html>
