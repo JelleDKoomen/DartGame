@@ -18,65 +18,37 @@ function addGame() {
 function showSpinner() {
     document.getElementById("setup").classList.add("hidden");
     document.getElementById("spinnerContainer").classList.remove("hidden");
-    drawWheel();
+    generateReel();
 }
 
-let canvas = document.getElementById("wheelCanvas");
-let ctx = canvas.getContext("2d");
-let spinning = false;
-let selectedGame = "";
+function generateReel() {
+    let reel = document.getElementById("reel");
+    reel.innerHTML = "";
 
-function drawWheel() {
-    let sections = games.length;
-    let anglePerSection = (2 * Math.PI) / sections;
-    
-    for (let i = 0; i < sections; i++) {
-        ctx.beginPath();
-        ctx.moveTo(250, 250);
-        ctx.arc(250, 250, 250, i * anglePerSection, (i + 1) * anglePerSection);
-        ctx.fillStyle = i % 2 === 0 ? "#ffcc00" : "#ffaa00";
-        ctx.fill();
-        ctx.stroke();
-        
-        ctx.fillStyle = "black";
-        ctx.font = "16px Arial";
-        ctx.fillText(games[i], 250 + Math.cos(i * anglePerSection + anglePerSection / 2) * 150, 
-                     250 + Math.sin(i * anglePerSection + anglePerSection / 2) * 150);
-    }
+    let extendedGames = [...games, ...games, ...games]; // Extra duplicaten om het rollen realistischer te maken
+
+    extendedGames.forEach(game => {
+        let div = document.createElement("div");
+        div.className = "reel-item";
+        div.textContent = game;
+        reel.appendChild(div);
+    });
 }
 
 function spinWheel() {
-    if (spinning) return;
-    spinning = true;
+    if (games.length === 0) return;
+
+    let reel = document.getElementById("reel");
+    let randomIndex = Math.floor(Math.random() * games.length);
+    let offset = randomIndex * -33; // Verschuift naar een willekeurige game
     
-    let rotations = Math.floor(Math.random() * 10) + 5;
-    let duration = 3000; 
+    reel.style.transition = "transform 3s cubic-bezier(0.25, 1, 0.5, 1)";
+    reel.style.transform = `translateX(${offset}%)`;
 
-    let start = performance.now();
-    function animate(time) {
-        let elapsed = time - start;
-        let progress = elapsed / duration;
-
-        let spinAngle = rotations * 360 * (1 - Math.pow(1 - progress, 3)); 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.save();
-        ctx.translate(250, 250);
-        ctx.rotate((spinAngle * Math.PI) / 180);
-        ctx.translate(-250, -250);
-        drawWheel();
-        ctx.restore();
-
-        if (elapsed < duration) {
-            requestAnimationFrame(animate);
-        } else {
-            spinning = false;
-            let index = Math.floor(Math.random() * games.length);
-            selectedGame = games[index];
-            document.getElementById("result").textContent = "Gekozen minigame: " + selectedGame;
-        }
-    }
-    
-    requestAnimationFrame(animate);
+    setTimeout(() => {
+        document.getElementById("result").textContent = `Gekozen minigame: ${games[randomIndex]}`;
+        document.getElementById("result").classList.remove("hidden");
+    }, 3000);
 }
 
 function resetGame() {

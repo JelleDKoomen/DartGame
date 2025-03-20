@@ -22,7 +22,37 @@ button:hover {
     background-color: #ffaa00;
 }
 
-canvas {
+#spinner {
+    width: 80%;
+    max-width: 600px;
+    height: 100px;
+    margin: 20px auto;
+    overflow: hidden;
     border: 5px solid white;
+    background-color: black;
+    position: relative;
+}
+
+#reel {
+    display: flex;
+    width: 200%;
+    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.reel-item {
+    flex: 0 0 33%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    padding: 30px;
+    background-color: red;
+    margin: 5px;
+}
+
+#result {
+    font-size: 32px;
+    font-weight: bold;
     margin-top: 20px;
+    color: yellow;
 }
